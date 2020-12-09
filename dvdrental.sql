@@ -4,7 +4,7 @@ SELECT * FROM Film;
 SELECT * FROM Actor;
 SELECT * FROM Rental;
 
--- Query that contains actor's first and last name combined as full_name, film title, film description and length of the movie. --
+-- 1) Query that contains actor's first and last name combined as full_name, film title, film description and length of the movie. --
 
 SELECT film_actor.actor_id,
 	film_actor.film_id,
@@ -19,7 +19,7 @@ RIGHT OUTER JOIN
 film_actor
 ON film_actor.actor_id = film_actor.film_id;
 
--- Query that contains list of actors and movies where the movie length was more than 60 minutes
+-- 2) Query that contains list of actors and movies where the movie length was more than 60 minutes
 
 SELECT film_actor.actor_id,
 	film_actor.film_id,
