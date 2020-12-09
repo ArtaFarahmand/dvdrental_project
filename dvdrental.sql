@@ -6,8 +6,7 @@ SELECT * FROM Rental;
 
 -- Query that contains actor's first and last name combined as full_name, film title, film description and length of the movie. --
 
-SELECT 
-	film_actor.actor_id,
+SELECT film_actor.actor_id,
 	film_actor.film_id,
 	CONCAT(actor.first_name,' ',actor.last_name) AS full_name,
 	film.title,
@@ -22,8 +21,7 @@ ON film_actor.actor_id = film_actor.film_id;
 
 -- Query that contains list of actors and movies where the movie length was more than 60 minutes
 
-SELECT 
-	film_actor.actor_id,
+SELECT film_actor.actor_id,
 	film_actor.film_id,
 	CONCAT(actor.first_name,' ',actor.last_name) AS full_name,
 	film.title,
