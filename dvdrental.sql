@@ -41,8 +41,7 @@ WHERE film.length > 60;
 SELECT account_id,
 	full_name,
 	COUNT(film_title) AS film_Count
-FROM 
-	(SELECT actors.actor_id AS account_id,
+FROM (SELECT actors.actor_id AS account_id,
 	actors.first_name,
 	actors.last_name,
 	actors.first_name || ' ' || actors.last_name AS full_name,
@@ -65,11 +64,11 @@ SELECT full_name,
 	WHEN film_length > 12 AND film_length <= 180 THEN 'Between 2 - 3 hours'
 	ELSE 'More then 3 hours long ' END AS filmlen_groups 
 FROM (SELECT a.first_name AS first_name,
-		a.last_name As last_name,
-		a.first_name || ' ' || a.last_name AS full_name,
-		f.title AS film_title,
-		f.length AS film_length
-	FROM film_actor fa
+	a.last_name As last_name,
+	a.first_name || ' ' || a.last_name AS full_name,
+	f.title AS film_title,
+	f.length AS film_length
+FROM film_actor fa
 	  INNER JOIN actor a
 	  ON fa.actor_id = a.actor_id
 	  INNER JOIN film f
