@@ -69,10 +69,10 @@ FROM (SELECT a.first_name AS first_name,
 	f.title AS film_title,
 	f.length AS film_length
 FROM film_actor fa
-	 INNER JOIN actor a
-	 ON fa.actor_id = a.actor_id
-	 INNER JOIN film f
-	 ON f.film_id = fa.film_id	
+	INNER JOIN actor a
+	ON fa.actor_id = a.actor_id
+	INNER JOIN film f
+	ON f.film_id = fa.film_id	
 ) T1;
 
 -- 2) Query to count of movies in each of the 4 filmlen_groups: 1 hour or less, Between 1-2 hours, Between 2-3 hours, More than 3 hours --
