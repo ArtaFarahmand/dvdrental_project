@@ -145,7 +145,7 @@ ORDER BY 3 ASC;
 
 -- 3) Finally, provide a table with the family-friendly film category, each of the quartiles, and the corresponding count of movies within each combination of film category for each corresponding rental duration category. --
 
--- -- Provide a table with the family-friendly film category, each of the quartiles, and the corresponding count of movies within each combination of film category for each corresponding rental duration category --
+-- Provide a table with the family-friendly film category, each of the quartiles, and the corresponding count of movies within each combination of film category for each corresponding rental duration category --
 
 SELECT category_name,
 	quartiles,
@@ -167,3 +167,24 @@ FROM (SELECT c.name AS category_name,
 ) t1
 GROUP BY 1, 2
 ORDER BY 1, 2;
+
+-- Workspace + Question Set 2 --
+
+-- 1) We want to find out how the two stores compare in their count of rental orders during every month for all the years we have data for. Write a query that returns the store ID for the store, the year and month and the number of rental orders each store has fulfilled for that month. Your table should include a column for each of the following: year, month, store ID and count of rental orders fulfilled during that month. --
+
+-- -- Write a query that returns the store ID for the store, the year and month and the number of rental orders each store has fulfilled for that month. Your table should include a column for each of the following: year, month, store ID and count of rental orders fulfilled during that month. --
+
+SELECT DATE_PART('Year', rental_date) AS rental_years,
+	DATE_PART('Month', rental_date) AS rental_months,
+	store.store_id,
+	COUNT(*) AS rental_count
+FROM rental
+INNER JOIN payment
+ON payment.rental_id = rental.rental_id
+INNER JOIN staff
+ON staff.staff_id = payment.staff_id
+INNER JOIN store
+ON store.store_id = staff.store_id
+GROUP BY 1, 2, 3
+ORDER BY 4 DESC;
+
