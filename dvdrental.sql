@@ -35,3 +35,22 @@ RIGHT OUTER JOIN
 film_actor
 ON film_actor.actor_id = film_actor.film_id
 WHERE film.length > 60;
+
+-- Query that captures the actor id, full name of the actor, and counts the number of movies each actor has made --
+
+SELECT account_id,
+	full_name,
+	COUNT(film_title) AS film_Count
+FROM 
+	(SELECT actors.actor_id AS account_id,
+	actors.first_name,
+	actors.last_name,
+	actors.first_name || ' ' || actors.last_name AS full_name,
+	movies.title AS film_title
+	FROM film_actor films
+	INNER JOIN actor actors
+	ON films.film_id = actors.actor_id
+	INNER JOIN  film movies
+	ON movies.film_id = films.film_id) t1
+GROUP BY 1, 2
+ORDER BY 3 DESC
