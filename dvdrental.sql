@@ -36,7 +36,7 @@ film_actor
 ON film_actor.actor_id = film_actor.film_id
 WHERE film.length > 60;
 
--- Query that captures the actor id, full name of the actor, and counts the number of movies each actor has made --
+-- 3) Query that captures the actor id, full name of the actor, and counts the number of movies each actor has made --
 
 SELECT account_id,
 	full_name,
