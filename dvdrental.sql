@@ -4,6 +4,8 @@ SELECT * FROM Film;
 SELECT * FROM Actor;
 SELECT * FROM Rental;
 
+-- Practice Quiz 1 --
+
 -- 1) Query that contains actor's first and last name combined as full_name, film title, film description and length of the movie. --
 
 SELECT film_actor.actor_id,
@@ -54,6 +56,8 @@ FROM (SELECT actors.actor_id AS account_id,
 GROUP BY 1, 2
 ORDER BY 3 DESC;
 
+-- Practice Quiz 2 --
+
 -- 1) Query that displays a table with 4 columns: actor's full name, film title, length of movie, and a column name "filmlen_groups" that classifies movies based on their length. Filmlen_groups should include 4 categories: 1 hour or less, Between 1-2 hours, Between 2-3 hours, More than 3 hours --
 
 SELECT full_name,
@@ -87,6 +91,7 @@ FROM (SELECT title, length,
 	FROM film) t1
 ORDER BY filmlen_groups;
 
+-- Workspace + Question Set 1 --
 
 -- 1) We want to understand more about the movies that families are watching. The following categories are considered family movies: Animation, Children, Classics, Comedy, Family and Music.
 
@@ -113,4 +118,52 @@ WHERE t1.film_category = 'Animation'
 GROUP BY t1.film_title,
 	t1.film_category,
 	t1.rental_count
-ORDER BY t1.film_title ASC;
+ORDER BY t1.film_category, t1.film_title ASC;
+
+-- 2) Now we need to know how the length of rental duration of these family-friendly movies compares to the duration that all movies are rented for. Can you provide a table with the movie titles and divide them into 4 levels (first_quarter, second_quarter, third_quarter, and final_quarter) based on the quartiles (25%, 50%, 75%) of the rental duration for movies across all categories? Make sure to also indicate the category that these family-friendly movies fall into. -- 
+
+-- Provide a table with the movie titles and divide them into 4 levels (first_quarter, second_quarter, third_quarter, and final_quarter) based on the quartiles (25%, 50%, 75%) of the rental duration for movies across all categories --
+
+SELECT f.title AS film_title,
+	c.name AS category_name,
+	f.rental_duration AS rental_duration,
+	NTILE(4) OVER (ORDER BY f.rental_duration) AS quartiles
+FROM film f
+INNER JOIN film_category fc
+ON f.film_id = fc.film_id
+INNER JOIN category c
+ON c.category_id = fc.category_id
+WHERE c.name IN(
+	'Animation',
+	'Childern',
+	'Comedy',
+	'Family',
+	'Music'
+)
+GROUP BY 1, 2, 3
+ORDER BY 3 ASC;
+
+-- 3) Finally, provide a table with the family-friendly film category, each of the quartiles, and the corresponding count of movies within each combination of film category for each corresponding rental duration category. --
+
+-- -- Provide a table with the family-friendly film category, each of the quartiles, and the corresponding count of movies within each combination of film category for each corresponding rental duration category --
+
+SELECT category_name,
+	quartiles,
+	COUNT(t1.category_name) AS category_count
+FROM (SELECT c.name AS category_name,
+	  NTILE(4) OVER (ORDER BY f.rental_duration) AS quartiles
+	  FROM film f
+	  INNER JOIN film_category fc
+	  ON f.film_id = fc.film_id
+	  INNER JOIN category c
+	  ON c.category_id = fc.category_id
+	  WHERE c.name IN(
+	'Animation',
+	'Childern',
+	'Comedy',
+	'Family',
+	'Music'
+)
+	 ) t1
+GROUP BY 1, 2
+ORDER BY 1, 2;
