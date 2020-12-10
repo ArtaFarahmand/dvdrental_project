@@ -53,4 +53,37 @@ FROM
 	INNER JOIN  film movies
 	ON movies.film_id = films.film_id) t1
 GROUP BY 1, 2
-ORDER BY 3 DESC
+ORDER BY 3 DESC;
+
+-- 1) Query that displays a table with 4 columns: actor's full name, film title, length of movie, and a column name "filmlen_groups" that classifies movies based on their length. Filmlen_groups should include 4 categories: 1 hour or less, Between 1-2 hours, Between 2-3 hours, More than 3 hours --
+
+SELECT full_name,
+	film_title,
+	film_length,
+	CASE WHEN film_length <= 60 THEN '1 hour or less'
+	WHEN film_length > 60 AND film_length <= 120 THEN 'Between 1 - 2 hours'
+	WHEN film_length > 12 AND film_length <= 180 THEN 'Between 2 - 3 hours'
+	ELSE 'More then 3 hours long ' END AS filmlen_groups 
+FROM (SELECT a.first_name AS first_name,
+		a.last_name As last_name,
+		a.first_name || ' ' || a.last_name AS full_name,
+		f.title AS film_title,
+		f.length AS film_length
+	FROM film_actor fa
+	  INNER JOIN actor a
+	  ON fa.actor_id = a.actor_id
+	  INNER JOIN film f
+	  ON f.film_id = fa.film_id	
+) T1;
+
+-- 2) Query to count of movies in each of the 4 filmlen_groups: 1 hour or less, Between 1-2 hours, Between 2-3 hours, More than 3 hours --
+
+SELECT DISTINCT (filmlen_groups),
+	COUNT(title) OVER (PARTITION BY filmlen_groups) AS filmcount_bylength
+FROM (SELECT title, length,
+	CASE WHEN length <= 60 THEN '1 hour or less'
+	WHEN length > 60 AND length <= 120 THEN 'Between 1 - 2 hours'
+	WHEN length > 12 AND length <= 180 THEN 'Between 2 - 3 hours'
+	ELSE 'More then 3 hours long ' END AS filmlen_groups  
+	  FROM film) t1
+ORDER BY filmlen_groups;
