@@ -86,3 +86,31 @@ FROM (SELECT title, length,
 	ELSE 'More then 3 hours long ' END AS filmlen_groups  
 	FROM film) t1
 ORDER BY filmlen_groups;
+
+
+-- 1) We want to understand more about the movies that families are watching. The following categories are considered family movies: Animation, Children, Classics, Comedy, Family and Music.
+
+-- Query that lists each movie, the film category it is classified in, and the number of times it has been rented out --
+
+SELECT t1.film_title,
+	t1.film_category,
+	SUM(t1.rental_count) OVER (PARTITION BY rental_count) AS rental_count
+FROM (SELECT
+	  f.title AS film_title,
+	  c.name AS film_category,
+	  r.rental_id AS rental_count
+	  FROM film f
+	  INNER JOIN film_category fc
+	  ON f.film_id = fc.film_id
+	  INNER JOIN category c
+	  ON fc.category_id = c.category_id
+	  INNER JOIN rental r
+	  ON f.film_id = r.rental_id
+	 ) t1
+WHERE t1.film_category = 'Animation' 
+	OR t1.film_category = 'Classic' 
+	OR t1.film_category = 'Comedy'
+GROUP BY t1.film_title,
+	t1.film_category,
+	t1.rental_count
+ORDER BY t1.film_title ASC;
