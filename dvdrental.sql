@@ -158,12 +158,12 @@ FROM (SELECT c.name AS category_name,
 	  INNER JOIN category c
 	  ON c.category_id = fc.category_id
 	  WHERE c.name IN(
-	'Animation',
-	'Childern',
-	'Comedy',
-	'Family',
-	'Music'
-)
-	 ) t1
+			'Animation',
+			'Childern',
+			'Comedy',
+			'Family',
+			'Music'
+		)
+) t1
 GROUP BY 1, 2
 ORDER BY 1, 2;
